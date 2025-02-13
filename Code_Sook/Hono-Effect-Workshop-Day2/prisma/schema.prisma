@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id         Int        @id @default(autoincrement())
+  name       String
+  role       Role       @default(Junior_Developer)
+  department Department
+  overtimes  Overtime[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  deletedAt  DateTime?
+
+  @@index([role, department])
+  @@index([department])
+}
+
+model Overtime {
+  id          Int       @id @default(autoincrement())
+  date        DateTime
+  hoursWorked Float
+  reason      String
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employeeId  Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([date])
+  @@index([employeeId])
+}
+
+enum Role {
+  Junior_Developer
+  Senior_Developer
+  Lead
+  C_Level
+}
+
+enum Department {
+  IT
+  Accounting
+  HR
+  Manager
+}

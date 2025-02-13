@@ -1,0 +1,7 @@
+import type { EmployeeService } from "../../types/services/employee.js"
+import { Effect } from "effect"
+import { EmployeeRepositoryContext } from "../../repositories/employees/index.js"
+
+export const update: EmployeeService["update"] = (id, data) => EmployeeRepositoryContext.pipe(
+  Effect.andThen(repo => repo.update(id, data)),
+)

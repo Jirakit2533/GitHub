@@ -1,0 +1,43 @@
+services:
+
+# ╭─ postgres ─────────────────────────────────────────────────────────╮
+
+  postgres:
+    image: postgres
+    container_name: db
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=hono
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=codesook
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ['CMD', 'pg_isready', -U, <postgres user>]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# ╰─ postgres ─────────────────────────────────────────────────────────╯
+
+# ╭─ postgres admin ───────────────────────────────────────────────────╮
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - '8888:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@codesook.dev
+      PGADMIN_DEFAULT_PASSWORD: qLTrQEWZsNuBMsQGFnzKEVipU
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+
+# ╰─ postgres admin ───────────────────────────────────────────────────╯
+
+volumes:
+  db-data:

@@ -1,0 +1,16 @@
+import type { Branded } from "../../schema/index.js"
+import type { EmployeeService } from "../../types/services/employee.js"
+import { Effect } from "effect"
+import { EmployeeRepositoryContext } from "../../repositories/employees/index.js"
+
+export const findOneById: EmployeeService["findOneById"] = (id: Branded.EmployeeId) => {
+  return EmployeeRepositoryContext.pipe(
+    Effect.andThen(repo => repo.findByIdWithRelations(id),
+    ),
+  )
+}
+
+export const findMany: EmployeeService["findMany"] = EmployeeRepositoryContext.pipe(
+  Effect.andThen(repo => repo.findManyWithRelations(),
+  ),
+)

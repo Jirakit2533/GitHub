@@ -1,0 +1,7 @@
+import type { EmployeeService } from "../../types/services/employee.js"
+import { Effect } from "effect"
+import { EmployeeRepositoryContext } from "../../repositories/employees/index.js"
+
+export const removeById: EmployeeService["removeById"] = id => EmployeeRepositoryContext.pipe(
+  Effect.andThen(repo => repo.remove(id)),
+)

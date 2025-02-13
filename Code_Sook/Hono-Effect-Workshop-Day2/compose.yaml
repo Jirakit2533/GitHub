@@ -1,0 +1,38 @@
+services:
+  server:
+    image: hono-day1:latest
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://codesook:mysecretpassword@db:5432/hono?schema=public
+    ports:
+      - 3000:3000
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    user: postgres
+    # volumes:
+    #   - ./db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=hono
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=codesook
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", -U, <postgres user>]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: hono-migration
+    container_name: migrate
+    profiles:
+      - migrate
+    environment:
+      DATABASE_URL: postgresql://codesook:mysecretpassword@db:5432/hono?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy

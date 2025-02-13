@@ -1,0 +1,15 @@
+import type { EmployeeSchema } from "../../schema/index.js"
+import { Effect } from "effect"
+import { EmployeeRepositoryContext } from "../../repositories/employees/index.js"
+
+// export function create(data: EmployeeSchema.CreateEmployeeEncoded) {
+//   return EmployeeRepositoryContext.pipe(
+//     Effect.andThen(repo => repo.create(data)),
+//   )
+// }
+
+export function create(data: EmployeeSchema.CreateEmployeeEncoded) {
+  return EmployeeRepositoryContext.pipe(
+    Effect.andThen(repo => repo.create(data)),
+  )
+}
