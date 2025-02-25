@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ItemBox from "../components/ItemBox.astro";
+---	
+
+
+<BaseLayout>
+
+	<div class="headItem">
+		<ItemBox>Item 1</ItemBox>
+		<ItemBox>Item 2</ItemBox>
+		<ItemBox>Item 3</ItemBox>
+	</div>
+
+	<div class="space-x-4 mt-8 mx-4 gap-t-4">
+		<div class="border">item</div>	
+		<div class="border">item</div>	
+		<div class="border">item</div>	
+		<div class="size-18 bg-amber-600 rounded-3xl mt-6 ml-10"></div>
+	</div> 
+</BaseLayout>
