@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมเว็ปแปลงไฟล์ภาพ</title>
+    <style>
+        body {
+            background-color: lightblue;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .file-details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>โปรแกรมเว็ปแปลงไฟล์ภาพ</h1>
+        <input type="file" id="fileInput" multiple>
+        <div class="file-details" id="fileDetails"></div>
+        <br>
+        <label for="exportLocation">เลือก "ตำแหน่งไฟล์ส่งออก":</label>
+        <input type="file" id="exportLocation" webkitdirectory directory>
+        <br><br>
+        <label for="fileType">เลือก "สกุลไฟล์":</label>
+        <select id="fileType">
+            <option value="png">PNG</option>
+            <option value="bmp">BMP</option>
+            <option value="emf">EMF</option>
+            <option value="gif">GIF</option>
+            <option value="svg">SVG</option>
+            <option value="tiff">TIFF</option>
+            <option value="jpg">JPG</option>
+        </select>
+        <br><br>
+        <button id="startButton">เริ่มแปลงไฟล์</button>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileDetails = document.getElementById('fileDetails');
+        const exportLocation = document.getElementById('exportLocation');
+        const fileType = document.getElementById('fileType');
+        const startButton = document.getElementById('startButton');
+
+        fileInput.addEventListener('change', () => {
+            const files = fileInput.files;
+            fileDetails.innerHTML = '';
+            for (const file of files) {
+                fileDetails.innerHTML += `<p>File Name: ${file.name}, File Size: ${file.size} bytes</p>`;
+            }
+        });
+
+        startButton.addEventListener('click', async () => {
+            const exportPath = exportLocation.files[0].path;
+            const selectedFileType = fileType.value;
+            const fileNames = Array.from(fileInput.files).map(file => file.path);
+
+            const response = await fetch('http://127.0.0.1:5000/merge', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    file_names: fileNames,
+                    export_path: exportPath,
+                    file_type: selectedFileType
+                })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+</body>
+</html>
